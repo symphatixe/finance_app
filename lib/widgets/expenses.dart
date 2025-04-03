@@ -1,0 +1,43 @@
+import 'package:finance_app/widgets/expenses_list/expenses_list.dart';
+import 'package:finance_app/models/expense.dart';
+import 'package:flutter/material.dart';
+
+class Expenses extends StatefulWidget{
+  const Expenses({super.key});
+
+  @override
+  State<Expenses> createState() {
+    return _ExpensesState();
+  }
+}
+
+class _ExpensesState extends State<Expenses>{
+  final List<Expense> _registeredExpenses = [
+    Expense(
+      title: 'Gym Membership',
+      amount: 42.99,
+      date: DateTime.now(),
+      category: Category.leisure
+    ),
+    Expense(
+      title: 'MTA',
+      amount: 2.90,
+      date: DateTime.now(),
+      category: Category.travel
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Text("Chart"),
+          Expanded(
+            child: ExpensesList(expenses: _registeredExpenses)
+          ),
+        ],
+      ),
+    );
+  }
+}
