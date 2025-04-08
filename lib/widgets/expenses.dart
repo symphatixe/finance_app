@@ -1,5 +1,6 @@
 import 'package:finance_app/widgets/expenses_list/expenses_list.dart';
 import 'package:finance_app/models/expense.dart';
+import 'package:finance_app/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
 
 class Expenses extends StatefulWidget{
@@ -12,6 +13,13 @@ class Expenses extends StatefulWidget{
 }
 
 class _ExpensesState extends State<Expenses>{
+  void _openAddExpenseOverlay() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => NewExpense(),
+    );
+  }
+
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Gym Membership',
@@ -30,6 +38,15 @@ class _ExpensesState extends State<Expenses>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Vadim\'s Cool Expense Tracker'),
+        actions: [
+          IconButton(
+            onPressed: _openAddExpenseOverlay,
+            icon: const Icon(Icons.add_box_outlined)
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Text("Chart"),
