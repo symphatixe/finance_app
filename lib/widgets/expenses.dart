@@ -20,6 +20,12 @@ class _ExpensesState extends State<Expenses>{
     );
   }
 
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
+  }
+
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Gym Membership',
