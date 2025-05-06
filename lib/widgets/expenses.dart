@@ -1,3 +1,4 @@
+import 'package:finance_app/widgets/chart/chart.dart';
 import 'package:finance_app/widgets/expenses_list/expenses_list.dart';
 import 'package:finance_app/models/expense.dart';
 import 'package:finance_app/widgets/new_expense.dart';
@@ -27,6 +28,30 @@ class _ExpensesState extends State<Expenses>{
     });
   }
 
+  void _removeExpense(Expense expense) {
+    int removedIndex = _registeredExpenses.indexOf(expense);
+
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: const Text("Expense has been removed"),
+        action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(removedIndex, expense);
+            });
+          }
+        ),
+      )
+    );
+  }
+
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Gym Membership',
@@ -44,6 +69,14 @@ class _ExpensesState extends State<Expenses>{
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text("No expenses found, add an expense using the plus in the upper right corner."),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(expenses: _registeredExpenses, onRemoveExpense: _removeExpense);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vadim\'s Cool Expense Tracker'),
@@ -56,9 +89,11 @@ class _ExpensesState extends State<Expenses>{
       ),
       body: Column(
         children: [
-          Text("Chart"),
+          Chart(
+            expenses: _registeredExpenses
+          ),
           Expanded(
-            child: ExpensesList(expenses: _registeredExpenses)
+            child: mainContent
           ),
         ],
       ),
